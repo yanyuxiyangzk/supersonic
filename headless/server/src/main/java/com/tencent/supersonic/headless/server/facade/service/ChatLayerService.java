@@ -23,6 +23,8 @@ public interface ChatLayerService {
 
     ParseResp parse(QueryNLReq queryNLReq);
 
+    ParseResp parse2(QueryNLReq queryNLReq);
+
     void correct(QuerySqlReq querySqlReq, User user);
 
     SqlEvaluation validate(QuerySqlReq querySqlReq, User user);

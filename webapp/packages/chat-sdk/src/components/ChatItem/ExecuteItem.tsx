@@ -153,6 +153,8 @@ const ExecuteItem: React.FC<Props> = ({
               <span style={{ marginRight: 5 }}>总结:</span>
               {data.textSummary}
             </p>
+            
+
           )}
 
           {renderCustomExecuteNode && executeItemNode ? (

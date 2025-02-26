@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class DateUtils {
@@ -160,12 +161,45 @@ public class DateUtils {
         String timeString = timeFormat.format(date);
         return !timeString.equals("00:00:00");
     }
+    public static LocalDate isDatePattern(String input) {
+        LocalDate startDate = null;
+        // 定义可能的日期时间格式
+        String[] formats = {"yyyy-MM-dd", "yyyyMMdd", "yyyy.MM.dd", "yyyy/MM/dd"};
+        String[] yearMonthRegexs = {"^\\d{4}-(0[1-9]|1[0-2])$", "^\\d{4}(0[1-9]|1[0-2])$",
+                "^\\d{4}/(0[1-9]|1[0-2])$", "^\\d{4}.(0[1-9]|1[0-2])$"};
+        final Pattern pattern = Pattern.compile(yearMonthRegexs[0]);
+        final Pattern pattern2 = Pattern.compile(yearMonthRegexs[1]);
+        final Pattern pattern3 = Pattern.compile(yearMonthRegexs[2]);
+        final Pattern pattern4 = Pattern.compile(yearMonthRegexs[3]);
 
+        final DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern(formats[0]);
+        final DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern(formats[1]);
+        final DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern(formats[2]);
+        final DateTimeFormatter formatter4 = DateTimeFormatter.ofPattern(formats[3]);
+        if (pattern.matcher(input).matches()) {
+            input += "-01";
+            startDate = LocalDate.parse(input, formatter1);
+        } else if (pattern2.matcher(input).matches()) {
+            input += "01";
+            startDate = LocalDate.parse(input, formatter2);
+        } else if (pattern3.matcher(input).matches()) {
+            input += "/01";
+            startDate = LocalDate.parse(input, formatter3);
+        } else if (pattern4.matcher(input).matches()) {
+            input += ".01";
+            startDate = LocalDate.parse(input, formatter4);
+        } else {
+            startDate = LocalDate.parse(input);
+        }
+        return startDate;
+    }
     public static List<String> getDateList(String startDateStr, String endDateStr,
             DatePeriodEnum period) {
         try {
-            LocalDate startDate = LocalDate.parse(startDateStr);
-            LocalDate endDate = LocalDate.parse(endDateStr);
+//            LocalDate startDate = LocalDate.parse(startDateStr);
+//            LocalDate endDate = LocalDate.parse(endDateStr);
+            LocalDate startDate = isDatePattern(startDateStr);
+            LocalDate endDate = isDatePattern(endDateStr);
             List<String> datesInRange = new ArrayList<>();
             LocalDate currentDate = startDate;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");

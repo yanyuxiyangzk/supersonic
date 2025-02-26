@@ -65,6 +65,25 @@ public class S2ChatLayerService implements ChatLayerService {
 
     @Override
     public ParseResp parse(QueryNLReq queryNLReq) {
+        String text = queryNLReq.getQueryText();
+        if(text == null && text.length() == 0) {
+            return null;
+        }
+        text = "使用模糊查询," + text;
+        queryNLReq.setQueryText(text);
+        ParseResp parseResp = new ParseResp(text);
+        ChatQueryContext queryCtx = buildChatQueryContext(queryNLReq);
+        queryCtx.setParseResp(parseResp);
+        if (queryCtx.getMapInfo().isEmpty()) {
+            chatWorkflowEngine.start(ChatWorkflowState.MAPPING, queryCtx);
+        } else {
+            chatWorkflowEngine.start(ChatWorkflowState.PARSING, queryCtx);
+        }
+        return parseResp;
+    }
+
+    @Override
+    public ParseResp parse2(QueryNLReq queryNLReq) {
         ParseResp parseResp = new ParseResp(queryNLReq.getQueryText());
         ChatQueryContext queryCtx = buildChatQueryContext(queryNLReq);
         queryCtx.setParseResp(parseResp);

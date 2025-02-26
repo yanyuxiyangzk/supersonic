@@ -444,7 +444,7 @@ const ChatItem: React.FC<Props> = ({
   return (
     <ChartItemContext.Provider value={{ register, call }}>
       <div className={prefixCls}>
-        {!isMobile && <IconFont type="icon-zhinengsuanfa" className={`${prefixCls}-avatar`} />}
+        {!isMobile && <IconFont type="icon-zhinengzhuli" className={`${prefixCls}-avatar`} />}
         <div className={isMobile ? `${prefixCls}-mobile-msg-card` : ''}>
           <div className={`${prefixCls}-time`}>
             {parseTimeCost?.parseStartTime
